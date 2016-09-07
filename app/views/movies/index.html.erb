@@ -38,14 +38,12 @@
 
           <label><strong>Genre</strong></label>
 
-          <% if false %>
           <% @genres.each do |genre| %>
             <div class="checkbox">
               <label>
-                <%= check_box_tag 'book[genre_ids][]', genre.id %> <%= genre.name %>
+                <%= check_box_tag 'movie[genre_ids][]', genre.id %> <%= genre.name %>
               </label>
             </div>
-          <% end %>
           <% end %>
         </div>
 
@@ -90,18 +88,18 @@
 
       </ul>
     </div>
-    <% if false %>
+
     <div class="col-sm-4">
       <h2>Genres</h2>
       <ul class="list-unstyled">
         <% @genres.each do |genre| %>
           <li>
-            <%= link_to genre.name, books_path(filter: genre.name),
+            <%= link_to genre.name, movies_path(filter: genre.name),
               class: 'label label-primary' %>
           </li>
         <% end %>
       </ul>
     </div>
-    <% end %>
+
   </div>
 </div>

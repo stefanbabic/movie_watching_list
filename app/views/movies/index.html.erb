@@ -1,33 +1,107 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
 
-<h1>Movies</h1>
+  <h1>Watching List</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-      <th>Year</th>
-      <th>Description</th>
-      <th>IMDB</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+  <ol class="breadcrumb">
+    <li class="active">
+      Movies
+    </li>
+  </ol>
 
-  <tbody>
-    <% @movies.each do |movie| %>
-      <tr class='<%= movie.finished? ? "finished" : "unfinished" %>'>
-        <td><%= movie.title %></td>
-        <td><%= movie.year %></td>
-        <td><%= movie.description %></td>
-        <td><%= movie.imdb_id %></td>
-        <td><%= link_to 'Show', movie %></td>
-        <td><%= link_to 'Edit', edit_movie_path(movie) %></td>
-        <td><%= link_to 'Destroy', movie, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+  <div class='row'>
+    <div class='col-sm-12'>
+      <p>
+        <form>
+          <legend>Search</legend>
+          <div class='col-xs-4'>
+            <input type='text' class='form-control' value='<%= params[:keyword] %>' name='keyword' placeholder='Keyword' >
+          </div>
+        </form>
+      </p>
+      <p class='pull-right'>
+        <a href='#' id='show-form' class='btn btn-primary'>New Movie Form</a>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+
+
+  <div class='col-sm-12 movie-form'>
+    <p>
+      <%= form_for(Movie.new, remote: true,
+                   html: { class: 'horizontal-form' }) do |f| %>
+      <legend>New Movie</legend>
+
+      <div class='col-sm-5'>
+        <div class='form-group'>
+
+          <label><strong>Genre</strong></label>
+
+          <% if false %>
+          <% @genres.each do |genre| %>
+            <div class="checkbox">
+              <label>
+                <%= check_box_tag 'book[genre_ids][]', genre.id %> <%= genre.name %>
+              </label>
+            </div>
+          <% end %>
+          <% end %>
+        </div>
+
+        <br>
+
+        <div class='form-group'>
+          <%= f.text_field :title, class: 'form-control', placeholder: 'Title' %>
+        </div>
+        <div class='form-group'>
+          <%= f.number_field :year, class: 'form-control', placeholder: 'Year' %>
+        </div>
+        <div class='form-group'>
+          <%= f.text_field :description, class: 'form-control', placeholder: 'Description' %>
+        </div>
+        <div class='form-group'>
+          <%= f.text_field :imdb_id, class: 'form-control', placeholder: 'IMDB ID' %>
+        </div>
+
+        <div class='form-group'>
+          <legend>Rating</legend>
+          <% (1..5).each do |rating| %>
+            <label class='radio-inline'>
+              <%= rating %><%= f.radio_button :rating, rating %>
+            </label>
+          <% end %>
+        </div>
+
+        <div class='form-group'>
+          <%= f.submit class: 'btn btn-primary' %>
+        </div>
+      </div>
+      <% end %>
+    </p>
+  </div>
+
+
+  <div class="row">
+    <div class="col-sm-8">
+      <ul class="list-unstyled book-list">
+
+        <%= render @movies %>
+
+      </ul>
+    </div>
+    <% if false %>
+    <div class="col-sm-4">
+      <h2>Genres</h2>
+      <ul class="list-unstyled">
+        <% @genres.each do |genre| %>
+          <li>
+            <%= link_to genre.name, books_path(filter: genre.name),
+              class: 'label label-primary' %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Movie', new_movie_path %>
+  </div>
+</div>

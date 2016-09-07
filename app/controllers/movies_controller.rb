@@ -4,7 +4,8 @@ class MoviesController < ApplicationController
   # GET /movies
   # GET /movies.json
   def index
-    @movies = Movie.search(params[:keyword]).filter(params[:filter])
+    @movies = Movie.includes(:genres).search(params[:keyword]).
+              filter(params[:filter])
     @genres = Genre.all
   end
 
@@ -31,6 +32,7 @@ class MoviesController < ApplicationController
       if @movie.save
         format.html { redirect_to @movie, notice: 'Movie was successfully created.' }
         format.json { render :show, status: :created, location: @movie }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @movie.errors, status: :unprocessable_entity }
@@ -70,6 +72,7 @@ class MoviesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def movie_params
-      params.require(:movie).permit(:title, :year, :description, :imdb_id)
+      params.require(:movie).permit(:title, :year, :description, :imdb_id,
+                                    { genre_ids: [] }, :rating)
     end
 end
